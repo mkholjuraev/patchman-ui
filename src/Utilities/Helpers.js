@@ -19,6 +19,11 @@ import {
 import { intl } from './IntlProvider';
 import { packageSystemsColumns } from '../SmartComponents/Systems/SystemsListAssets';
 
+export const deleteUnsetObjectValues = (object) => {
+    Object.keys(object).forEach(key => object[key] === undefined && delete object[key]);
+    return object;
+};
+
 export const convertLimitOffset = (limit, offset) => {
     return [offset / limit + 1, limit];
 };
@@ -266,7 +271,7 @@ export const encodeURLParams = parameters => {
     let urlParams = { ...parameters };
     delete urlParams.systemProfile;
     delete urlParams.selectedTags;
-    return encodeParams(urlParams, false);
+    return encodeParams(deleteUnsetObjectValues(urlParams), false);
 };
 
 export const decomposeFilterValue = filterValue => {
@@ -427,20 +432,20 @@ export const prepareEntitiesParams = (parameters) => {
     const apiParams = { ...parameters, offset, limit };
 
     //we need explicitly remove 'undefined' parameters for safety
-    Object.keys(apiParams).forEach(key => apiParams[key] === undefined && delete apiParams[key]);
-
-    return apiParams;
+    return deleteUnsetObjectValues(apiParams);
 };
 
-export const persistantParams = (page, perPage, sort) => (
-    {
-        page: Number(page || 1),
-        perPage: Number(perPage || 20),
-        ...(sort && {
-            sortBy: {
-                key: sort.replace(/^-/, ''),
-                direction: sort.match(/^-/) ? 'desc' : 'asc'
-            }
-        })
-    }
-);
+export const persistantParams = (patchParams, decodedParams) => {
+    const persistantParams = { ...patchParams, ...decodedParams };
+    return (
+        {
+            page: Number(persistantParams.page || 1),
+            perPage: Number(persistantParams.perPage || 20),
+            ...(persistantParams.sort && {
+                sortBy: {
+                    key: persistantParams.sort.replace(/^-/, ''),
+                    direction: persistantParams.sort.match(/^-/) ? 'desc' : 'asc'
+                }
+            })
+        }
+    );};

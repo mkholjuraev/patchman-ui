@@ -11,12 +11,15 @@ import { changePackagesListParams, fetchPackagesAction } from '../../store/Actio
 import { exportPackagesCSV, exportPackagesJSON } from '../../Utilities/api';
 import { packagesListDefaultFilters } from '../../Utilities/constants';
 import { createPackagesRows } from '../../Utilities/DataMappers';
-import { createSortBy } from '../../Utilities/Helpers';
+import { createSortBy, decodeQueryparams, encodeURLParams } from '../../Utilities/Helpers';
 import { setPageTitle, useOnExport, usePerPageSelect, useSetPage, useSortColumn } from '../../Utilities/Hooks';
 import { intl } from '../../Utilities/IntlProvider';
+import { useHistory } from 'react-router-dom';
 
 const Packages = () => {
     const dispatch = useDispatch();
+    const [firstMount, setFirstMount] = React.useState(true);
+    const history = useHistory();
     const pageTitle = 'Packages';
     setPageTitle(pageTitle);
     const packageRows = useSelector(
@@ -35,10 +38,17 @@ const Packages = () => {
     );
 
     React.useEffect(() => {
-        dispatch(fetchPackagesAction(queryParams));
+        if (firstMount) {
+            apply(decodeQueryparams(history.location.search));
+            setFirstMount(false);
+        } else {
+            history.push(encodeURLParams(queryParams));
+            dispatch(fetchPackagesAction(queryParams));
+        }
     }, [queryParams]);
 
     function apply(params) {
+        console.log(params);
         dispatch(changePackagesListParams(params));
     }
 

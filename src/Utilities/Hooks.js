@@ -120,7 +120,17 @@ export const useOnSelect = (rawData, selectedRows, fetchAllData, selectRows,
     const onSelect = React.useCallback((event, selected, rowId) => {
         const createSelectedRow = (rawData, toSelect = []) => {
             rawData.forEach((row) => {
-                toSelect.push(
+                const {
+                    packages_installed: installedPckg,
+                    packages_updatable: updatablePckg,
+                    rhba_count: rhba,
+                    rhsa_count: rhsa,
+                    rhea_count: rhea
+                } = row.attributes || {};
+
+                const isDisabled = updatablePckg === 0 || [installedPckg, rhba, rhsa, rhea].every(count => count === 0);
+
+                !isDisabled && toSelect.push(
                     {
                         id: constructKey(row),
                         selected: constructFilename && constructFilename(row) || row.id

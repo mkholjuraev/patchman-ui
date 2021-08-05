@@ -1,3 +1,17 @@
+## [1.28.3](https://github.com/RedHatInsights/patchman-ui/compare/v1.28.2...v1.28.3) (2021-08-05)
+
+
+### Bug Fixes
+
+* **revert:** System details do not clear parameters on umount ([0ce8087](https://github.com/RedHatInsights/patchman-ui/commit/0ce8087c191fc1a65f49b32e22faa47322d1970c))
+
+## [1.28.2](https://github.com/RedHatInsights/patchman-ui/compare/v1.28.1...v1.28.2) (2021-08-05)
+
+
+### Bug Fixes
+
+* **VersionFilter:** make sure installed_evra type is handled correctly ([9af8966](https://github.com/RedHatInsights/patchman-ui/commit/9af8966159e1ee14c50f60bc4903e541146222d4))
+
 ## [1.28.1](https://github.com/RedHatInsights/patchman-ui/compare/v1.28.0...v1.28.1) (2021-08-02)
 
 

@@ -39,43 +39,50 @@ const StatusCard = ({ title, color, Icon, value, filter, apply }) => {
     );
 };
 
-const SystemsStatusreport = ({ metadata: { subtotals }, apply }) => (
-    <Main style={{ paddingBottom: 0 }}>
+const SystemsStatusreport = ({ metadata, apply }) => {
 
-        <Grid hasGutter span={3}>
-            <GridItem>
-                <StatusCard
-                    title={intl.formatMessage(messages.labelsStatusSystemsUpToDate)}
-                    Icon={CheckCircleIcon}
-                    color={'var(--pf-global--success-color--100)'}
-                    value={subtotals?.patched}
-                    apply={apply}
-                    filter={{ filter: { packages_updatable: 'eq:0' } }}
-                />
-            </GridItem>
-            <GridItem>
-                <StatusCard
-                    title={intl.formatMessage(messages.labelsStatusSystemsWithPatchesAvailable)}
-                    Icon={PackageIcon}
-                    color={'var(--pf-global--primary-color--100)'}
-                    value={subtotals?.unpatched}
-                    apply={apply}
-                    filter={{ filter: { packages_updatable: 'gt:0' } }}
-                />
-            </GridItem>
-            <GridItem>
-                <StatusCard
-                    title={intl.formatMessage(messages.labelsStatusStaleSystems)}
-                    Icon={ExclamationTriangleIcon}
-                    color={'var(--pf-global--warning-color--100)'}
-                    value={subtotals?.stale}
-                    apply={apply}
-                    filter={{ filter: { stale: true } }}
-                />
-            </GridItem>
-        </Grid>
-    </Main>
-);
+    let subtotals = React.useMemo(()=>{
+
+        return metadata?.subtotals;
+    }, [metadata.filter?.os?.values?.length, metadata?.subtotals !== undefined]);
+
+    return (
+        <Main style={{ paddingBottom: 0 }}>
+            <Grid hasGutter span={3}>
+                <GridItem>
+                    <StatusCard
+                        title={intl.formatMessage(messages.labelsStatusSystemsUpToDate)}
+                        Icon={CheckCircleIcon}
+                        color={'var(--pf-global--success-color--100)'}
+                        value={subtotals?.patched}
+                        apply={apply}
+                        filter={{ filter: { packages_updatable: 'eq:0' } }}
+                    />
+                </GridItem>
+                <GridItem>
+                    <StatusCard
+                        title={intl.formatMessage(messages.labelsStatusSystemsWithPatchesAvailable)}
+                        Icon={PackageIcon}
+                        color={'var(--pf-global--primary-color--100)'}
+                        value={subtotals?.unpatched}
+                        apply={apply}
+                        filter={{ filter: { packages_updatable: 'gt:0' } }}
+                    />
+                </GridItem>
+                <GridItem>
+                    <StatusCard
+                        title={intl.formatMessage(messages.labelsStatusStaleSystems)}
+                        Icon={ExclamationTriangleIcon}
+                        color={'var(--pf-global--warning-color--100)'}
+                        value={subtotals?.stale}
+                        apply={apply}
+                        filter={{ filter: { stale: true } }}
+                    />
+                </GridItem>
+            </Grid>
+        </Main>
+    );
+};
 
 StatusCard.propTypes = {
     title: propTypes.string,
@@ -88,7 +95,8 @@ StatusCard.propTypes = {
 
 SystemsStatusreport.propTypes = {
     metadata: propTypes.object,
-    apply: propTypes.func
+    apply: propTypes.func,
+    filter: propTypes.any
 };
 
 export default SystemsStatusreport;

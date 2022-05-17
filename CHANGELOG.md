@@ -1,3 +1,23 @@
+## [1.47.1](https://github.com/RedHatInsights/patchman-ui/compare/v1.47.0...v1.47.1) (2022-05-16)
+
+
+### Bug Fixes
+
+* **1494:** fix selected systems across steps ([e218910](https://github.com/RedHatInsights/patchman-ui/commit/e21891011306e747dc7f903f6706c51f8fbae129))
+* **SPM-1458:** change patch set page title ([91fae8c](https://github.com/RedHatInsights/patchman-ui/commit/91fae8ce5b84be1302cf5c37441cb4b750e36a59))
+
+# [1.47.0](https://github.com/RedHatInsights/patchman-ui/compare/v1.46.0...v1.47.0) (2022-04-26)
+
+
+### Bug Fixes
+
+* **SystemDetail:** show tags and baseline info ([00a2266](https://github.com/RedHatInsights/patchman-ui/commit/00a2266aa1bbde7dac6d7124d8256db544550964))
+
+
+### Features
+
+* **ReviewSystems:** add patch-set column ([64cc3e0](https://github.com/RedHatInsights/patchman-ui/commit/64cc3e0e1c5441203e3163f524055a86645f978b))
+
 # [1.46.0](https://github.com/RedHatInsights/patchman-ui/compare/v1.45.1...v1.46.0) (2022-04-20)
 
 

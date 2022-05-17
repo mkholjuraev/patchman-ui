@@ -3,7 +3,7 @@ import { Flex, FlexItem, Tooltip } from '@patternfly/react-core';
 import {
     BugIcon, CheckIcon, FlagIcon,
     EnhancementIcon, InfoCircleIcon, LongArrowAltUpIcon,
-    SecurityIcon, PficonTemplateIcon
+    SecurityIcon
 } from '@patternfly/react-icons';
 import { SortByDirection } from '@patternfly/react-table/dist/js';
 import { findIndex, flatten } from 'lodash';
@@ -351,6 +351,11 @@ export const buildFilterChips = (filters, search, searchChipLabel = 'Search') =>
             }));
         } else {
             const { values } = filterCategories[category];
+
+            if (!filters[category]) {
+                return [];
+            }
+
             return [].concat(filters[category]).map(filterValue => {
                 const match = values.find(
                     item =>
@@ -612,8 +617,24 @@ export const convertIsoToDate = (isoDate) => {
         `-${dateObject.getDate().toString().padStart(2, '0')}`;
 };
 
-export const buildSelectedSystemsObj = (systemsIDs) => {
-    const assignedSystemsObject = systemsIDs?.reduce((object, system) => {
+export const filterSelectedActiveSystemIDs = (selectedSystemsObject) => {
+    const formValueSystemIDs = [];
+    if (typeof selectedSystemsObject === 'object') {
+        Object.keys(selectedSystemsObject).forEach((key) => {
+            if (selectedSystemsObject[key]) {
+                formValueSystemIDs.push(key);
+            }
+        });
+    }
+
+    return formValueSystemIDs;
+};
+
+export const buildSelectedSystemsObj = (systemsIDs, formValueSystems) => {
+
+    const mergedSystems = [...systemsIDs, ...filterSelectedActiveSystemIDs(formValueSystems)];
+
+    const assignedSystemsObject = mergedSystems?.reduce((object, system) => {
         object[system] = true;
         return object;
     }, {});
@@ -626,9 +647,3 @@ export const objUndefinedToFalse = (object) =>
         modifiedObject[key] =  object[key] === undefined ? false : object[key];
         return modifiedObject;
     }, {});
-
-export const createPatchSetColumn = (value) => value && (
-    <Tooltip content={value} position='right'>
-        <PficonTemplateIcon size="sm" color={'var(--pf-global--info-color--100)'} />
-    </Tooltip>
-);

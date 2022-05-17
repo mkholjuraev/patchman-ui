@@ -2,19 +2,27 @@ import componentTypes from '@data-driven-forms/react-form-renderer/component-typ
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
 import { intl } from '../../Utilities/IntlProvider';
 import messages from '../../Messages';
+import { filterSelectedActiveSystemIDs } from '../../Utilities/Helpers';
 
 export const reviewSystemColumns = [{
     key: 'display_name',
     title: 'Name',
     props: {
-        width: 40
+        width: 50
     }
 },
 {
     title: 'OS',
     key: 'os',
     props: {
-        width: 60
+        width: 25
+    }
+},
+{
+    key: 'baseline_name',
+    title: 'Patch set',
+    props: {
+        width: 25
     }
 }
 ];
@@ -100,11 +108,13 @@ export const schema = (patchSetID) => ({
 });
 
 export const validatorMapper = {
-    'validate-systems': () => (system) => {
-        if (system === undefined) {
+    'validate-systems': () => (formValueSystems) => {
+        const systems = filterSelectedActiveSystemIDs(formValueSystems);
+
+        if (systems === undefined) {
             return;
         }
-        else if (Object.keys(system).length > 0) {
+        else if (systems.length > 0) {
             return;
         } else {
             return intl.formatMessage(messages.patchSetNoSystemSelected);
